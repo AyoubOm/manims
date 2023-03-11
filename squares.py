@@ -15,11 +15,10 @@ class Squares(Scene):
 
 		# Big Square formula
 		bigSquareTex = MathTex(r'{ 5 }\times{ 5 }', font_size=FONT_SIZE)
-		bigSquareTex.move_to([sideLength*2 + xShift, 1.5 + yShift, 0])
+		bigSquareTex.move_to([sideLength*2 + xShift - 6, 1.5 + yShift, 0])
 
 		self.play(Create(bigSquareTex))
 		self.wait()
-
 
 		# Draw Squares
 		for i in range(size):
@@ -33,7 +32,17 @@ class Squares(Scene):
 		self.play(Create(vgroup))
 		self.wait()
 
+		
+		minusTex = MathTex(r'-', font_size=FONT_SIZE)
+		minusTex.next_to(bigSquareTex, RIGHT)
+		
+		self.play(Create(minusTex))
 
+
+		smallSquareTex = MathTex(r'{ 3 }\times{ 3 }', font_size=FONT_SIZE)
+		smallSquareTex.next_to(minusTex, RIGHT)
+
+		self.play(Create(smallSquareTex))
 
 		smallVgroup = VGroup()
 		for i in range(smallSize):
@@ -45,15 +54,21 @@ class Squares(Scene):
 		lengthBrace = Brace(smallVgroup, direction=UP).set_color(GREEN_B)
 		widthBrace = Brace(smallVgroup, direction=RIGHT).set_color(GREEN_B)
 
-		braceVgroup = VGroup(lengthBrace, widthBrace)
-		for brace in [lengthBrace, widthBrace]:
+		braces = [lengthBrace, widthBrace]
+		braceTexts = []
+
+		for brace in braces:
 			smallSizeTex = MathTex(r'{ 3 }', font_size=FONT_SIZE-2)
 			smallSizeTex.next_to(brace, brace.get_direction())
 			if brace == lengthBrace:
 				smallSizeTex.shift(LEFT*(sideLength*3/2))
 			else:
 				smallSizeTex.shift(UP*(sideLength*3/2))
-			braceVgroup.add(smallSizeTex)
+			
+			braceTexts.append(smallSizeTex)
+
+		braceVgroup = VGroup(*(braces+braceTexts))
+
 
 
 		self.add(braceVgroup)
@@ -66,6 +81,12 @@ class Squares(Scene):
 		self.remove(*smallVgroup)
 		self.wait()
 
+		# Equal sign
+		equalTex = MathTex(r'=', font_size=FONT_SIZE)
+		equalTex.next_to(smallSquareTex, RIGHT)
+		
+		self.play(Create(equalTex))
+
 		# Move remaining small group
 		remainingSmallGroup = VGroup()
 		for i in range(smallSize, size):
@@ -76,7 +97,41 @@ class Squares(Scene):
 		self.play(remainingSmallGroup.animate.move_to([sideLength-1.3, 1.5-sideLength*6, 0]), run_time=1)
 		self.wait()
 
-		# Move and transform braces
-		self.play(ScaleInPlace(widthBrace, (size/smallSize + 1)))
-		self.play(widthBrace.animate.shift(DOWN*sideLength*2.4).shift(LEFT*sideLength*2.8))
+		# Remove size x size
+		"""
+		self.play(FadeOut(bigSquareTex), run_time=0.1)
+		self.remove(bigSquareTex)
+		"""
+
+		# Move and transform braces and their tex
+		for (brace, braceTex) in zip(braces, braceTexts):
+
+			if brace == widthBrace:
+				self.play(ScaleInPlace(widthBrace, (size/smallSize + 1)), run_time=0.5)
+				self.play(widthBrace.animate.shift(DOWN*sideLength*2.4).shift(LEFT*sideLength*2.8), run_time=0.5)
+			else:
+				self.play(ScaleInPlace(lengthBrace, (size-smallSize)/smallSize), run_time=0.5)
+				self.play(lengthBrace.animate.shift(LEFT*sideLength*2.5), run_time=0.5)
+
+			if brace == lengthBrace:
+				text = r'{ 5 } - { 3 }'
+				shiftDirection = LEFT*sideLength*1.5
+			else:
+				text = r'{ 5 } + { 3 }'
+				shiftDirection = UP*(sideLength*(size+smallSize)/2)
+
+			newBraceTex = MathTex(text, font_size=FONT_SIZE-2)
+			newBraceTex.next_to(brace, brace.get_direction())
+			newBraceTex.shift(shiftDirection)
+
+			self.add(newBraceTex)
+			self.play(FadeTransform(braceTex, newBraceTex))
+
+		# Result tex
+		resultTex = MathTex(r'({ 5 } - { 3 })({ 5 } + { 3 })', font_size=FONT_SIZE)
+		resultTex.next_to(equalTex, RIGHT)
+		
+		self.play(Create(resultTex))
+		self.wait()
+
 		
