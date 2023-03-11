@@ -10,3 +10,7 @@
 
 ## n^2 - k^2 = (n-k)(n+k) Geometric point of view
 ![Alt Text](./outputs/squareMinusSquare.gif)
+
+
+## Command
+manim -pqh <file.py> <ScenceClass>
