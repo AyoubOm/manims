@@ -97,12 +97,6 @@ class Squares(Scene):
 		self.play(remainingSmallGroup.animate.move_to([sideLength-1.3, 1.5-sideLength*6, 0]), run_time=1)
 		self.wait()
 
-		# Remove size x size
-		"""
-		self.play(FadeOut(bigSquareTex), run_time=0.1)
-		self.remove(bigSquareTex)
-		"""
-
 		# Move and transform braces and their tex
 		for (brace, braceTex) in zip(braces, braceTexts):
 
