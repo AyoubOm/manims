@@ -13,4 +13,4 @@
 
 
 ## Command
-manim -pqh <file.py> <ScenceClass>
+manim -pqh file.py ScenceClass
