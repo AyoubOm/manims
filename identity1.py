@@ -2,17 +2,14 @@ from manim import *
 
 FONT_SIZE = 24
 
-class myScene(Scene):
+class Distances(Scene):
     def construct(self):
         refNumber = 5
         refSquare = refNumber * refNumber
         totalNumbers = 4
         numberToInclude = [refSquare - i*i for i in range(totalNumbers + 1)]
 
-        axes = Axes(
-            x_range=[0, 28]
-            )
-        
+        axes = Axes(x_range=[0, 28])
 
         number = Text(str(refSquare), font_size=FONT_SIZE)
         number.move_to([axes.c2p(refSquare, -0.5, 0)])
