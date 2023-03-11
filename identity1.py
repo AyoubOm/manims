@@ -22,7 +22,7 @@ class Distances(Scene):
             number = Text(str(refSquare - i*i), font_size=FONT_SIZE)
             number.move_to([axes.c2p(refSquare-i*i, -0.5, 0)])
 
-            formula = MathTex("{}*{}".format(refNumber-i, refNumber+i), font_size=FONT_SIZE)
+            formula = MathTex(r'{}\times{}'.format(refNumber-i, refNumber+i), font_size=FONT_SIZE)
             formula.move_to([axes.c2p(refSquare-i*i, 0.5, 0)])
 
 
@@ -37,5 +37,3 @@ class Distances(Scene):
             self.play(Create(VGroup(formula, number, gap, text)))
 
             self.wait(0.5)
-
-
